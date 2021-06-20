@@ -281,6 +281,17 @@ class CellRowSpanTreeProcessor(Treeprocessor):
                 if td in tr:
                     tr.remove(td)
 
+            # Checking for spanned rows in thead.
+            thead = table.find('thead')
+            th_remove = []  # List of td objects to be removed
+            tr_index = 0
+            tr = thead.find('tr')
+            if self.RE_adjacent_bars.search(rows[tr_index]):
+                self._update_colspan_attrib(rows[tr_index], t_index, tr_index, tr, th_remove)
+            for tr, th in th_remove:
+                if th in tr:
+                    tr.remove(th)
+
 
 def makeExtension(*args, **kwargs):
     return CellRowSpanExtension(*args, **kwargs)
